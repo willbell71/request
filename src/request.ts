@@ -69,6 +69,10 @@ export class Request<T> implements IRequest<T> {
    */
   public send(url: URL): Promise<T> {
     return new Promise<T>((resolve: (value: T) => void, reject: (err: Error) => void) => {
+      if (this.requestBody) {
+        this.setHeader('content-length', `${this.requestBody.length}`);
+      }
+
       const options: http.RequestOptions = {
         hostname: url.hostname,
         port: parseInt(url.port) || ('https:' === url.protocol ? 443 : 80),
